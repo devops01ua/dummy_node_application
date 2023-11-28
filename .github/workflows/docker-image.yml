@@ -11,6 +11,7 @@ jobs:
   build:
 
     runs-on: ubuntu-latest
+    environment: development
 
     steps:
     - uses: actions/checkout@v3
@@ -19,8 +20,6 @@ jobs:
       with:
        username: ahrechanychenko
        password: ${{ secrets.DOCKERHUB_SECRET }}
-#    - name: Docker auth
-#      run: echo "${{ secrets.DOCKERHUB_SECRET }}" | docker login -u ahrechanychenko --password-stdin
     - name: Build the Docker image
       run: export VERSION=$(jq -r .version package.json) && docker build . --file Dockerfile --tag ahrechanychenko/node-test-app:$VERSION.$GITHUB_RUN_ID
     - name: Docker push
