@@ -1,0 +1,22 @@
+name: Docker Image CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Docker auth
+      run: echo $DOCKERHUB_SECRET | docker login -u ahrechanychenko --password-stdin
+    - name: Build the Docker image
+      run: export VERSION=$(jq -r .version package.json) && docker build . --file Dockerfile --tag ahrechanychenko/node-test-app:$VERSION.$GITHUB_RUN_ID
+    - name: Docker push
+      run: docker push ahrechanychenko/node-test-app:$VERSION.$GITHUB_RUN_ID
