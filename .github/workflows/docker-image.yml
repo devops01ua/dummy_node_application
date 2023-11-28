@@ -26,9 +26,9 @@ jobs:
       run: export VERSION=$(jq -r .version package.json) && docker push ahrechanychenko/node-test-app:$VERSION.$GITHUB_RUN_ID
 
   helm:
-
     runs-on: self-hosted
     environment: development
+    needs: build
     steps:
       - uses: actions/checkout@v3
       - name: check k8s
